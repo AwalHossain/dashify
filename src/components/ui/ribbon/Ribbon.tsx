@@ -9,30 +9,21 @@ interface RibbonProps {
 
 const Ribbon: React.FC<RibbonProps> = ({
     text,
-    position = 'top-right',
     color = 'primary',
     className = '',
 }) => {
-    // Position classes
-    const positionClasses = {
-        'top-left': 'top-2 left-2',
-        'top-right': 'top-2 right-2',
-        'bottom-left': 'bottom-2 left-2',
-        'bottom-right': 'bottom-2 right-2',
-    };
-
     // Color classes
     const colorClasses = {
-        primary: 'bg-blue-500 text-white',
-        success: 'bg-green-500 text-white',
-        warning: 'bg-yellow-500 text-white',
-        error: 'bg-red-500 text-white',
-        info: 'bg-blue-400 text-white',
+        primary: 'bg-blue-600 text-white border-blue-700',
+        success: 'bg-green-600 text-white border-green-700',
+        warning: 'bg-amber-500 text-white border-amber-600',
+        error: 'bg-red-500 text-white border-red-600',
+        info: 'bg-sky-500 text-white border-sky-600',
     };
 
     return (
         <div
-            className={`absolute z-10 px-2 py-1 text-xs font-semibold rounded ${positionClasses[position]} ${colorClasses[color]} ${className}`}
+            className={`inline-block px-2.5 py-0.5 text-[9px] font-medium uppercase tracking-wider border-b border-r shadow-sm ${colorClasses[color]} ${className}`}
         >
             {text}
         </div>
