@@ -1,4 +1,5 @@
-import { ColumnDefinition, Product } from "../../interface/product";
+import { ColumnDefinition, Product, SortDirection } from "../../interface/product";
+import { getSortIcon } from "../../utility/SortIcon";
 import Spinner from "../ui/spinner/Spinner";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import ProductRow from "./ProductRow";
@@ -11,10 +12,14 @@ interface ProductsTableProps {
     openDeleteModal: (slug: string, name: string) => void;
     onViewDetails: (slug: string) => void;
     onEditProduct: (product: Product) => void;
+    sortField: string | null;
+    sortDirection: SortDirection;
+    onSort: (field: string) => void;
 }
 
 export default function ProductsTable({
-    columns, products, loading, error, openDeleteModal, onViewDetails, onEditProduct
+    columns, products, loading, error, openDeleteModal, onViewDetails, onEditProduct,
+    sortField, sortDirection, onSort
 }: ProductsTableProps) {
     if (loading) {
         return (
@@ -70,6 +75,8 @@ export default function ProductsTable({
         );
     }
 
+
+
     return (
         <div className="w-full overflow-x-auto">
             <Table className="min-w-full table-auto">
@@ -79,9 +86,17 @@ export default function ProductsTable({
                             <TableCell
                                 key={column.key}
                                 isHeader
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 whitespace-nowrap"
+                                className={`px-5 py-3 text-gray-500 text-start text-theme-xs dark:text-gray-400 whitespace-nowrap ${column.sortable !== false ? 'cursor-pointer group' : ''}`}
+                                onClick={() => column.sortable !== false && onSort(column.sortKey || column.key)}
                             >
-                                {column.label}
+                                <div className="flex items-center font-medium">
+                                    {column.label}
+                                    {column.sortable !== false && (
+                                        <span className="ml-1 flex-shrink-0">
+                                            {getSortIcon(sortDirection, sortField, column.sortKey || column.key)}
+                                        </span>
+                                    )}
+                                </div>
                             </TableCell>
                         ))}
                         <TableCell
