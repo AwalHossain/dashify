@@ -12,6 +12,7 @@ export default function BasicTables() {
     {
       key: "product_name",
       label: "Product",
+      sortable: true,
       render: (value: unknown, row: Product) => (
         <div className="flex items-center gap-4 pl-2">
           <div className="relative w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center dark:bg-gray-800 shadow-sm">
@@ -47,10 +48,12 @@ export default function BasicTables() {
     {
       key: "product_category",
       label: "Category",
+      sortable: true,
     },
     {
       key: "product_price",
       label: "Price",
+      sortable: true,
       render: (value: unknown, row: Product) => {
         const originalPrice = parseFloat(String(value));
         const discountedPrice = originalPrice * (1 - row.discount_percentage / 100);
@@ -74,6 +77,7 @@ export default function BasicTables() {
     {
       key: "product_quantity",
       label: "Quantity",
+      sortable: true,
       render: (value: unknown) => {
         const quantity = Number(value);
         return (
@@ -88,6 +92,7 @@ export default function BasicTables() {
     {
       key: "in_stock",
       label: "Status",
+      sortable: true,
       render: (value: unknown) => {
         const inStock = Boolean(value);
         return (
@@ -103,6 +108,7 @@ export default function BasicTables() {
     {
       key: "rating",
       label: "Rating",
+      sortable: true,
       render: (value: unknown) => {
         const rating = Number(value);
         return (

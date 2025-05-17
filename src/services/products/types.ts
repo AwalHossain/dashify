@@ -43,6 +43,8 @@ export interface ProductsQueryParams {
     page: number;
     limit: number;
     search?: string;
+    sort_by?: string;
+    sort_order?: 'asc' | 'desc';
 }
 
 // API error response

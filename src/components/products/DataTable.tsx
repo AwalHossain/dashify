@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useMemo, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
-import { ColumnDefinition, Product } from "../../interface/product";
+import { ColumnDefinition, Product, SortDirection } from "../../interface/product";
 import { useDeleteProductMutation, useProductsQuery } from "../../services/products";
 import DeleteConfirmationModal from "../ui/modal/DeleteConfirmationModal";
 import ProductDetailsModal from "../ui/modal/ProductDetailsModal";
@@ -17,8 +18,10 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
-  // Use debounced search value for API calls
+
   const debouncedSearch = useDebounce(searchQuery, 500);
 
   useEffect(() => {
@@ -28,12 +31,65 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
   }, [debouncedSearch, searchQuery]);
 
 
-  const productsQuery = useProductsQuery({ page, limit, search: debouncedSearch });
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : sortDirection === 'desc' ? null : 'asc');
+      if (sortDirection === 'desc') {
+        setSortField(null);
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const productsQuery = useProductsQuery({
+    page,
+    limit,
+    search: debouncedSearch
+  });
+
   const deleteMutation = useDeleteProductMutation();
 
-  const products = productsQuery.data?.results || [];
+  // unsorted products from the query result
+  const unsortedProducts = productsQuery.data?.results || [];
   const total = productsQuery.data?.total_items || 0;
-  console.log(productsQuery.data, 'productsQuery.data');
+
+  //  client-side sorting with useMemo for performance
+  const products = useMemo(() => {
+    if (!sortField || !sortDirection) {
+      return unsortedProducts;
+    }
+
+    return [...unsortedProducts].sort((a, b) => {
+      const aValue = a[sortField as keyof Product];
+      const bValue = b[sortField as keyof Product];
+
+      // Handle different types of values
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        const comparison = aValue.localeCompare(bValue);
+        return sortDirection === 'asc' ? comparison : -comparison;
+      }
+
+      // Handle numeric values (including number-like strings)
+      const aNum = typeof aValue === 'string' ? parseFloat(aValue) : Number(aValue);
+      const bNum = typeof bValue === 'string' ? parseFloat(bValue) : Number(bValue);
+
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        return sortDirection === 'asc' ? aNum - bNum : bNum - aNum;
+      }
+
+      // Handle boolean values
+      if (typeof aValue === 'boolean' && typeof bValue === 'boolean') {
+        return sortDirection === 'asc'
+          ? (aValue === bValue ? 0 : aValue ? 1 : -1)
+          : (aValue === bValue ? 0 : aValue ? -1 : 1);
+      }
+
+      // Fallback for mixed or unsupported types
+      return 0;
+    });
+  }, [unsortedProducts, sortField, sortDirection]);
 
   const handleDelete = async () => {
     await deleteMutation.mutateAsync(deleteModal.slug);
@@ -76,6 +132,9 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
     },
     onViewDetails: handleViewDetails,
     onEditProduct: handleEditProduct,
+    sortField,
+    sortDirection,
+    onSort: handleSort
   };
 
   return (

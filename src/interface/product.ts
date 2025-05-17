@@ -24,4 +24,8 @@ export interface ColumnDefinition {
     key: string;
     label: string;
     render?: (value: unknown, row: Product) => ReactElement;
+    sortable?: boolean;
+    sortKey?: string;
 }
+
+export type SortDirection = 'asc' | 'desc' | null;
