@@ -10,10 +10,11 @@ interface ProductsTableProps {
     error: string | null;
     openDeleteModal: (slug: string, name: string) => void;
     onViewDetails: (slug: string) => void;
+    onEditProduct: (product: Product) => void;
 }
 
 export default function ProductsTable({
-    columns, products, loading, error, openDeleteModal, onViewDetails
+    columns, products, loading, error, openDeleteModal, onViewDetails, onEditProduct
 }: ProductsTableProps) {
     if (loading) {
         return (
@@ -59,7 +60,6 @@ export default function ProductsTable({
                         <TableRow>
                             <TableCell colSpan={columns.length + 1} className="h-40 text-center text-gray-500 dark:text-gray-400">
                                 <div className="flex flex-col items-center justify-center">
-                                    {/* no-data svg */}
                                     <span className="text-lg font-medium">No data found</span>
                                 </div>
                             </TableCell>
@@ -101,6 +101,7 @@ export default function ProductsTable({
                             columns={columns}
                             openDeleteModal={openDeleteModal}
                             onViewDetails={onViewDetails}
+                            onEditProduct={onEditProduct}
                         />
                     ))}
                 </TableBody>
