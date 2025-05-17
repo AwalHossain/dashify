@@ -1,15 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+// import { useLogoutMutation } from '../services/auth'; // Not using it directly here anymore
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    logout: () => void;
+    login: () => void; // Function to call after successful token storage by mutation
+    logout: () => Promise<void>;
     loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
     isAuthenticated: false,
-    logout: () => { },
+    login: () => { console.warn("Login function from AuthContext called before AuthProvider initialized"); },
+    logout: async () => { console.warn("Logout function from AuthContext called before AuthProvider initialized"); },
     loading: true,
 });
 
@@ -24,24 +27,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // Check if user is already logged in
         const token = localStorage.getItem('access_token');
-        if (token) {
-            setIsAuthenticated(true);
-        }
+        setIsAuthenticated(!!token);
         setLoading(false);
     }, []);
 
+    const loginContext = useCallback(() => {
+        setIsAuthenticated(true);
+    }, [setIsAuthenticated]);
 
-    const logout = () => {
+    const handleLogout = useCallback(async () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setIsAuthenticated(false);
-        window.location.href = '/signin';
-    };
+    }, [setIsAuthenticated]);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, logout, loading }}>
+        <AuthContext.Provider value={{ isAuthenticated, login: loginContext, logout: handleLogout, loading }}>
             {children}
         </AuthContext.Provider>
     );

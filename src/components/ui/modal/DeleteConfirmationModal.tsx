@@ -11,6 +11,7 @@ interface DeleteConfirmationModalProps {
     confirmButtonText?: string;
     cancelButtonText?: string;
     isLoading?: boolean;
+    error?: string | null;
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -23,6 +24,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     confirmButtonText = 'Delete',
     cancelButtonText = 'Cancel',
     isLoading = false,
+    error = null,
 }) => {
     const defaultMessage = `Are you sure you want to delete this ${itemName}? This action cannot be undone.`;
 
@@ -55,6 +57,12 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
                 <p className="text-center text-gray-500 dark:text-gray-400 mb-6">
                     {message || defaultMessage}
                 </p>
+
+                {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 dark:bg-red-900/30 dark:border-red-800 dark:text-red-400">
+                        {error}
+                    </div>
+                )}
 
                 <div className="flex gap-3 justify-center mt-6">
                     <button
