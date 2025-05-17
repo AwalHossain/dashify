@@ -1,4 +1,6 @@
-# Dashify - Modern React Admin Dashboard
+# Dashify - A Modern React Admin Dashboard
+
+![Dashify Dashboard Preview](./image.png)
 
 [![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
