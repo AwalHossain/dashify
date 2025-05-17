@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import PageMeta from "../../components/common/PageMeta";
-import useAuthLogin from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
 import useFormValidation from '../../hooks/useFormValidation';
+import { useLoginMutation } from '../../services/auth';
 import AuthLayout from "./AuthPageLayout";
 
 export default function SignIn() {
@@ -10,12 +12,14 @@ export default function SignIn() {
     password: ''
   });
 
-  const { login, isLoading, error, setError } = useAuthLogin();
-
+  const navigate = useNavigate();
+  const loginMutation = useLoginMutation();
+  const { login: loginContext } = useAuth();
 
   const validationRules = {
     email: (value: string) => {
       if (!value) return 'Email is required';
+      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) return 'Invalid email format';
       return null;
     },
     password: (value: string) => {
@@ -24,19 +28,19 @@ export default function SignIn() {
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm(validationRules)) {
       return;
     }
-
-    // Clear any previous errors
-    setError(null);
-
-    // Attempt login
-    await login(values.email, values.password);
+    try {
+      await loginMutation.mutateAsync({ email: values.email, password: values.password });
+      loginContext();
+      navigate('/');
+    } catch (err) {
+      console.error("Login failed in component handleSubmit catch block:", err);
+    }
   };
 
   return (
@@ -53,10 +57,9 @@ export default function SignIn() {
               <p className="text-gray-500 dark:text-gray-400">Sign in to your account</p>
             </div>
 
-            {/* Display errors */}
-            {error && (
+            {loginMutation.error && (
               <div className="mb-4 rounded-lg bg-red-100 p-4 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                {error}
+                {loginMutation.error instanceof Error ? loginMutation.error.message : 'An unexpected error occurred.'}
               </div>
             )}
 
@@ -128,10 +131,10 @@ export default function SignIn() {
 
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={loginMutation.isPending}
                 className="w-full rounded-lg bg-blue-500 px-4 py-2.5 text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? 'Signing in...' : 'Sign In'}
+                {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
 
