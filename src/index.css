@@ -3,7 +3,7 @@ layer(base);
 
 @import "tailwindcss";
 
-@custom-variant dark (&.dark, &.dark *);
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-*: initial;
@@ -776,7 +776,6 @@ span.flatpickr-weekday,
 .simplebar-scrollbar.simplebar-visible:before {
   @apply opacity-100;
 }
-
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */
 }
