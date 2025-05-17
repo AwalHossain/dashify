@@ -15,10 +15,10 @@ import {
 /**
  * Fetch a paginated list of products with optional filtering
  */
-export const fetchProducts = async ({ page = 1, limit = 10, search = "" }: ProductsQueryParams): Promise<ProductListData> => {
+export const fetchProducts = async ({ page = 1, page_size = 10, search = "" }: ProductsQueryParams): Promise<ProductListData> => {
     try {
         const response = await api.get<ProductsApiResponse>(ENDPOINTS.PRODUCTS.LIST, {
-            params: { page, limit, search },
+            params: { page, page_size, search },
         });
         return response.data.data;
     } catch (err) {

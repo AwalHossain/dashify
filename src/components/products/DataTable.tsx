@@ -16,7 +16,7 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
   const [productFormModal, setProductFormModal] = useState<{ open: boolean; productToEdit: Product | null }>({ open: false, productToEdit: null });
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [page_size, setPage_size] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -45,7 +45,7 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
 
   const productsQuery = useProductsQuery({
     page,
-    limit,
+    page_size,
     search: debouncedSearch
   });
 
@@ -143,8 +143,8 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
         <SearchQuery
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          limit={limit}
-          setLimit={setLimit}
+          page_size={page_size}
+          setPage_size={setPage_size}
           setPage={setPage}
         />
         <button
@@ -161,11 +161,11 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
 
       <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
         <div className="text-sm text-gray-500 dark:text-gray-400">
-          Showing {products.length > 0 ? (page - 1) * limit + 1 : 0} to {Math.min(page * limit, total)} of {total}
+          Showing {products.length > 0 ? (page - 1) * page_size + 1 : 0} to {Math.min(page * page_size, total)} of {total}
         </div>
         <PaginationControls
           page={page}
-          totalPages={Math.max(1, Math.ceil(total / limit))}
+          totalPages={Math.max(1, Math.ceil(total / page_size))}
           onPageChange={setPage}
         />
       </div>

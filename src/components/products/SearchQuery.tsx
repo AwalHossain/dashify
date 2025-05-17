@@ -3,8 +3,8 @@ import { ChangeEvent } from 'react';
 interface SearchQueryProps {
     searchQuery: string;
     setSearchQuery: (q: string) => void;
-    limit: number;
-    setLimit: (n: number) => void;
+    page_size: number;
+    setPage_size: (n: number) => void;
     setPage: (n: number) => void;
     searchPlaceholder?: string;
 }
@@ -12,8 +12,8 @@ interface SearchQueryProps {
 export default function SearchQuery({
     searchQuery,
     setSearchQuery,
-    limit,
-    setLimit,
+    page_size,
+    setPage_size,
     setPage,
     searchPlaceholder = 'Search...',
 }: SearchQueryProps) {
@@ -60,8 +60,8 @@ export default function SearchQuery({
                 <label className="text-sm text-gray-500 dark:text-gray-400">Show:</label>
                 <select
                     className="px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-white/[0.03] dark:border-white/[0.1] dark:text-white"
-                    value={limit}
-                    onChange={e => { setLimit(Number(e.target.value)); setPage(1); }}
+                    value={page_size}
+                    onChange={e => { setPage_size(Number(e.target.value)); setPage(1); }}
                 >
                     <option value={10}>10</option>
                     <option value={20}>20</option>

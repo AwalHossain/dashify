@@ -41,7 +41,7 @@ export interface ProductDetailsApiResponse {
 // Query parameters for product lists
 export interface ProductsQueryParams {
     page: number;
-    limit: number;
+    page_size: number;
     search?: string;
     sort_by?: string;
     sort_order?: 'asc' | 'desc';
