@@ -5,8 +5,8 @@ export const ENDPOINTS = {
     PRODUCTS: {
         LIST: "/product",
         DELETE: (id: string | number) => `/product/${id}`,
-        CREATE: "/product",
-        UPDATE: (id: string | number) => `/product/${id}`,
+        CREATE: "/product/",
+        UPDATE: (id: string | number) => `/product/${id}/`,
         GET: (id: string | number) => `/product/${id}`,
     }
 };
