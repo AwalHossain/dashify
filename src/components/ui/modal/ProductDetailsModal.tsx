@@ -30,15 +30,9 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
         <Modal isOpen={isOpen} onClose={onClose} className='w-full max-w-2xl'>
             <div className="p-6 md:p-8 max-h-[90vh] overflow-y-auto no-scrollbar overflow-x-hidden">
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
                         Product Details
                     </h3>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-400 hover:text-gray-500 focus:outline-none"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-square-chart-gantt-icon lucide-square-chart-gantt"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 8h7" /><path d="M8 12h6" /><path d="M11 16h5" /></svg>
-                    </button>
                 </div>
 
                 {isLoading && (
@@ -55,7 +49,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
 
                 {!isLoading && product && (
                     <div className="space-y-6">
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-center gap-4">
                             <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center dark:bg-gray-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-search-icon lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
 
@@ -67,7 +61,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                             </div>
 
                             <div className="flex-1">
-                                <h4 className="text-xl font-medium text-gray-900 dark:text-white">
+                                <h4 className="text-lg sm:text-xl font-medium text-gray-900 dark:text-white">
                                     {product.product_name}
                                 </h4>
                                 <p className="text-gray-500 dark:text-gray-400">
@@ -76,7 +70,7 @@ const ProductDetailsModal: React.FC<ProductDetailsModalProps> = ({
                             </div>
 
                             <div className="text-right">
-                                <div className="text-xl font-semibold text-gray-900 dark:text-white">
+                                <div className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                                     ${parseFloat(product.product_price).toFixed(2)}
                                     {product.discount_percentage > 0 && (
                                         <span className="ml-2 text-sm line-through text-gray-400">

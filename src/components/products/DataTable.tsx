@@ -139,7 +139,7 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
 
   return (
     <div className="w-full">
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+      <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:justify-between sm:items-center">
         <SearchQuery
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -147,12 +147,14 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
           setPage_size={setPage_size}
           setPage={setPage}
         />
-        <button
-          onClick={handleOpenAddModal}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-offset-gray-800 text-sm whitespace-nowrap"
-        >
-          Add New Product
-        </button>
+        <div className="">
+          <button
+            onClick={handleOpenAddModal}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-offset-gray-800 text-sm whitespace-nowrap w-full sm:w-auto"
+          >
+            Add New Product
+          </button>
+        </div>
       </div>
 
       <div className="w-full bg-white dark:bg-slate-800 rounded-md shadow-sm overflow-hidden">
