@@ -6,7 +6,7 @@ import AppLayout from "./layout/AppLayout";
 import SignIn from "./pages/AuthPages/SignIn";
 import Home from "./pages/Dashboard/Home";
 import NotFound from "./pages/OtherPage/NotFound";
-import BasicTables from "./pages/Tables/BasicTables";
+import BasicTables from "./pages/Tables/Table";
 
 
 const queryClient = new QueryClient({
