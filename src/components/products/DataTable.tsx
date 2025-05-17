@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
-import { ColumnDefinition } from "../../interface/product";
+import { ColumnDefinition, Product } from "../../interface/product";
 import { useDeleteProductMutation, useProductsQuery } from "../../services/productOperations";
 import DeleteConfirmationModal from "../ui/modal/DeleteConfirmationModal";
 import ProductDetailsModal from "../ui/modal/ProductDetailsModal";
+import ProductFormModal from "../ui/modal/ProductFormModal";
 import PaginationControls from "./PaginationControls";
 import ProductsTable from "./ProductsTable";
 import SearchQuery from "./SearchQuery";
@@ -11,6 +12,7 @@ import SearchQuery from "./SearchQuery";
 export default function DataTable({ columns }: { columns: ColumnDefinition[] }) {
   const [deleteModal, setDeleteModal] = useState({ open: false, slug: "", name: "" });
   const [detailsModal, setDetailsModal] = useState({ open: false, slug: null as string | null });
+  const [productFormModal, setProductFormModal] = useState<{ open: boolean; productToEdit: Product | null }>({ open: false, productToEdit: null });
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -26,7 +28,7 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
   }, [debouncedSearch, searchQuery]);
 
 
-  // React Query hooks for products and delete operation
+  // Query hooks for products and delete operation
   const productsQuery = useProductsQuery({ page, limit, search: debouncedSearch });
   const deleteMutation = useDeleteProductMutation();
 
@@ -49,6 +51,21 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
     setDetailsModal({ open: false, slug: null });
   };
 
+  // Handle product edit
+  const handleEditProduct = (product: Product) => {
+    setProductFormModal({ open: true, productToEdit: product });
+  };
+
+  // Close product form modal
+  const closeProductFormModal = () => {
+    setProductFormModal({ open: false, productToEdit: null });
+  };
+
+  // Open product form modal for adding a new product
+  const handleOpenAddModal = () => {
+    setProductFormModal({ open: true, productToEdit: null });
+  };
+
   // Handlers for table data
   const tableProps = {
     columns,
@@ -58,18 +75,27 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
     openDeleteModal: (slug: string, name: string) => {
       setDeleteModal({ open: true, slug, name });
     },
-    onViewDetails: handleViewDetails
+    onViewDetails: handleViewDetails,
+    onEditProduct: handleEditProduct,
   };
 
   return (
     <div className="w-full">
-      <SearchQuery
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        limit={limit}
-        setLimit={setLimit}
-        setPage={setPage}
-      />
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+        <SearchQuery
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          limit={limit}
+          setLimit={setLimit}
+          setPage={setPage}
+        />
+        <button
+          onClick={handleOpenAddModal}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 dark:focus:ring-offset-gray-800 text-sm whitespace-nowrap"
+        >
+          Add New Product
+        </button>
+      </div>
 
       <div className="w-full bg-white dark:bg-slate-800 rounded-md shadow-sm overflow-hidden">
         <ProductsTable {...tableProps} />
@@ -101,6 +127,13 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
         isOpen={detailsModal.open}
         onClose={closeDetailsModal}
         productSlug={detailsModal.slug}
+      />
+
+      {/* Product Form Modal for Add/Edit */}
+      <ProductFormModal
+        isOpen={productFormModal.open}
+        onClose={closeProductFormModal}
+        productToEdit={productFormModal.productToEdit}
       />
     </div>
   );
