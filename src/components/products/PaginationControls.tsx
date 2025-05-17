@@ -57,7 +57,7 @@ export default function PaginationControls({
             <button
                 onClick={handlePrev}
                 disabled={page === 1}
-                className="px-2 sm:px-4 py-2 text-sm font-medium bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600"
+                className="px-2 sm:px-4 py-2 text-sm font-medium bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:text-white"
             >
                 Previous
             </button>
@@ -87,7 +87,9 @@ export default function PaginationControls({
             <button
                 onClick={handleNext}
                 disabled={page === totalPages}
-                className="px-2 sm:px-4 py-2 text-sm font-medium bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600"
+                className="px-2 sm:px-4 py-2 text-sm font-medium bg-gray-100 border border-gray-300 rounded hover:bg-gray-200 disabled:opacity-50 dark:bg-gray-700 dark:border-gray-600 
+                dark:text-white
+                dark:hover:bg-gray-600"
             >
                 Next
             </button>
