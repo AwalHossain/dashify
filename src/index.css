@@ -776,3 +776,14 @@ span.flatpickr-weekday,
 .simplebar-scrollbar.simplebar-visible:before {
   @apply opacity-100;
 }
+
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
+}
+/* For IE and Edge (older versions) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+}
