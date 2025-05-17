@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { ColumnDefinition, Product } from "../../interface/product";
-import { useDeleteProductMutation, useProductsQuery } from "../../services/productOperations";
+import { useDeleteProductMutation, useProductsQuery } from "../../services/products";
 import DeleteConfirmationModal from "../ui/modal/DeleteConfirmationModal";
 import ProductDetailsModal from "../ui/modal/ProductDetailsModal";
 import ProductFormModal from "../ui/modal/ProductFormModal";
@@ -28,13 +28,12 @@ export default function DataTable({ columns }: { columns: ColumnDefinition[] }) 
   }, [debouncedSearch, searchQuery]);
 
 
-  // Query hooks for products and delete operation
   const productsQuery = useProductsQuery({ page, limit, search: debouncedSearch });
   const deleteMutation = useDeleteProductMutation();
 
-  // Extract data from the query
   const products = productsQuery.data?.results || [];
   const total = productsQuery.data?.total_items || 0;
+  console.log(productsQuery.data, 'productsQuery.data');
 
   const handleDelete = async () => {
     await deleteMutation.mutateAsync(deleteModal.slug);
