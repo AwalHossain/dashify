@@ -87,6 +87,28 @@ export const fetchProductDetails = async (slug: string): Promise<Product> => {
     }
 };
 
+// Add a new product
+export const addProduct = async (productData: Omit<Product, 'id' | 'slug' | 'created_at'>): Promise<Product> => {
+    try {
+        const response = await api.post<{ data: Product }>(ENDPOINTS.PRODUCTS.CREATE, productData);
+        return response.data.data;
+    } catch (err) {
+        const error = err as AxiosError<ApiErrorResponse>;
+        let errorMessage = 'Failed to add product.';
+
+        if (error.response?.data) {
+            const apiError = error.response.data;
+            if (apiError.message) errorMessage = apiError.message;
+            else if (apiError.error) errorMessage = apiError.error;
+            else if (typeof apiError.errors === 'string') errorMessage = apiError.errors;
+            else if (typeof apiError.errors === 'object' && apiError.errors !== null) {
+                const fieldErrors = Object.values(apiError.errors).flat().join(', ');
+                if (fieldErrors) errorMessage = fieldErrors;
+            }
+        }
+        throw new Error(errorMessage);
+    }
+};
 
 export const deleteProduct = async (productId: string | number): Promise<void> => {
     try {
@@ -124,7 +146,20 @@ export function useProductDetailsQuery(slug: string | null) {
     });
 }
 
-// React Query hook for deleting a product
+//hook for adding a product
+export function useAddProductMutation() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: addProduct,
+        onSuccess: () => {
+            // Invalidate and refetch products lists
+            queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+        },
+    });
+}
+
+// hook for deleting a product
 export function useDeleteProductMutation() {
     const queryClient = useQueryClient();
 
