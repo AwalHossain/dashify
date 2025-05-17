@@ -3,7 +3,6 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import DataTable from "../../components/products/DataTable";
 import Badge from "../../components/ui/badge/Badge";
-import Ribbon from "../../components/ui/ribbon/Ribbon";
 import Tooltip from "../../components/ui/tooltip/Tooltip";
 import { ColumnDefinition, Product } from "../../interface/product";
 
@@ -15,29 +14,22 @@ export default function BasicTables() {
       label: "Product",
       render: (value: unknown, row: Product) => (
         <div className="flex items-center gap-4 pl-2">
-          <div className="relative w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center dark:bg-gray-800 overflow-visible">
-            <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-            </svg>
+          <div className="relative w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center dark:bg-gray-800 shadow-sm">
+            {/* Product Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-package-search-icon lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /><circle cx="18.5" cy="15.5" r="2.5" /><path d="M20.27 17.27 22 19" /></svg>
 
+            {/* Featured Badge */}
             {row.is_featured && (
-              <div className="absolute -top-2 -right-1">
-                <Ribbon
-                  text="Featured"
-                  color="primary"
-                  className="text-center rounded-tl-sm"
-                />
-              </div>
+              <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
+                FEATURED
+              </span>
             )}
 
+            {/* Discount Badge */}
             {row.discount_percentage > 0 && (
-              <div className="absolute -bottom-2 -left-1">
-                <Ribbon
-                  text={`${row.discount_percentage}% OFF`}
-                  color="error"
-                  className="text-center rounded-br-sm"
-                />
-              </div>
+              <span className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
+                {row.discount_percentage}% OFF
+              </span>
             )}
           </div>
 
@@ -142,7 +134,10 @@ export default function BasicTables() {
       />
       <PageBreadcrumb pageTitle="Products" />
       <div className="space-y-6">
-        <ComponentCard title="Products Table">
+        <ComponentCard
+          title="Products Table"
+          desc="Products table with pagination, search and delete functionality"
+        >
           <DataTable
             columns={productColumns}
           />
